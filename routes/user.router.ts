@@ -3,7 +3,7 @@ import UserController from '../controllers/user.controller';
 
 const userRouter = Router();
 
-userRouter.get('/get-user/:id', UserController.getUser);
+userRouter.get('/get-user/:userId', UserController.getUser);
 userRouter.get('/get-all-users', UserController.getAllUsers);
 userRouter.get('/activate/:link', UserController.activate);
 userRouter.get('/refresh', UserController.refresh);

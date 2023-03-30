@@ -8,18 +8,24 @@ import tokenService from "./token.service";
 import UserDto from "../dtos/user.dto";
 
 class UserService {
-    // async isUserExists(email: string){
-    //     const user = await UserModel.findOne({email: email});
+    async getUser(userId: string){
+        const user = UserModel.findById(userId);
 
-    //     if(user){
-    //         throw ApiError.badRequest('User with this email already exists', {
-    //             msg: 'User with this email already exists',
-    //             param: 'email'
-    //         });
-    //     }
+        if(!user){
+            throw ApiError.badRequest('User with this id does not exist', {
+                msg: 'User with this id does not exist',
+                param: 'userId'
+            });
+        }
 
-    //     return user;
-    // }
+        return user;
+    }
+
+    async getAllUsers(){
+        const users = UserModel.find();
+
+        return users;
+    }
 
     async registration(name: string, email: string, password: string){
         const candidate = await UserModel.findOne({email: email});

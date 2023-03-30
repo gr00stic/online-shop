@@ -3,13 +3,25 @@ import UserService from '../services/user.service';
 
 class UserController {
     async getUser(req: Request, res: Response, next: NextFunction){
+        try {
+            const userId = req.params.userId;
 
-
-        res.json();
+            const user = await UserService.getUser(userId);
+            
+            return res.json(user);
+        } catch (e) {
+            next(e);
+        }
     }
 
     async getAllUsers(req: Request, res: Response, next: NextFunction){
-        
+        try {
+            const users = await UserService.getAllUsers();
+
+            return res.json(users);
+        } catch (e) {
+            next(e);
+        }
     }
 
     async registration(req: Request, res: Response, next: NextFunction){
@@ -38,15 +50,27 @@ class UserController {
     }
 
     async login(req: Request, res: Response, next: NextFunction){
-        
+        try {
+            
+        } catch (e) {
+            next(e)
+        }
     }
 
     async logout(req: Request, res: Response, next: NextFunction){
-        
+        try {
+            
+        } catch (e) {
+            next(e)
+        }
     }
 
     async refresh(req: Request, res: Response, next: NextFunction){
-        
+        try {
+            
+        } catch (e) {
+            next(e)
+        }
     }
 }
 
