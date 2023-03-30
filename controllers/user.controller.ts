@@ -26,7 +26,15 @@ class UserController {
     }
 
     async activate(req: Request, res: Response, next: NextFunction){
-        return res.json({msg: "activated"});
+        try {
+            const activationLink = req.params.link;  
+
+            const activatedUser = await UserService.activate(activationLink);
+
+            return res.json(activatedUser);
+        } catch (e) {
+            next(e);
+        }
     }
 
     async login(req: Request, res: Response, next: NextFunction){
