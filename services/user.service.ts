@@ -28,6 +28,8 @@ class UserService {
         const activationLink = v4();
 
         const user = await UserModel.create({name, email, password: hashPassword, activationLink});
+        
+        await mailService.sendActivationMail(email, `${process.env.API_URL}/api/user/activate/${activationLink}`);
 
         const userDto = new UserDto(user);
         const tokens = tokenService.generateTokens({...userDto});

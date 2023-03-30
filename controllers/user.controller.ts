@@ -26,7 +26,7 @@ class UserController {
     }
 
     async activate(req: Request, res: Response, next: NextFunction){
-        
+        return res.json({msg: "activated"});
     }
 
     async login(req: Request, res: Response, next: NextFunction){
