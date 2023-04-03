@@ -17,6 +17,10 @@ class ApiError extends Error {
     static notFound(message: string, errors = {}){
         return new ApiError(404, message, errors);
     }
+
+    static unauthorizedError(message: string, errors = {}){
+        return new ApiError(401, message, errors);
+    }
 }
 
 export default ApiError;
