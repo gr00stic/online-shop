@@ -1,11 +1,12 @@
 import Router from 'express';
 import UserController from '../controllers/user.controller';
 import {body} from 'express-validator';
+import authMiddleware from '../middleware/auth-middleware';
 
 const userRouter = Router();
 
 userRouter.get('/get-user/:userId', UserController.getUser);
-userRouter.get('/get-all-users', UserController.getAllUsers);
+userRouter.get('/get-all-users', authMiddleware, UserController.getAllUsers);
 userRouter.get('/activate/:link', UserController.activate);
 userRouter.get('/refresh', UserController.refresh);
 
