@@ -18,8 +18,8 @@ class ApiError extends Error {
         return new ApiError(404, message, errors);
     }
 
-    static unauthorizedError(message: string, errors = {}){
-        return new ApiError(401, message, errors);
+    static unauthorizedError(){
+        return new ApiError(401, 'Not authorized');
     }
 }
 

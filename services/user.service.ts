@@ -6,6 +6,7 @@ import UserModel from "../models/user.model";
 import mailService from "./mail.service";
 import tokenService from "./token.service";
 import UserDto from "../dtos/user.dto";
+import { log } from "console";
 
 class UserService {
     async getUser(userId: string){
@@ -22,7 +23,7 @@ class UserService {
     }
 
     async getAllUsers(){
-        const users = UserModel.find();
+        const users = await UserModel.find();
 
         return users;
     }
@@ -98,9 +99,23 @@ class UserService {
     }
 
     async refresh(refreshToken: string){
-        const token = await tokenService.refreshToken(refreshToken);
+        if(!refreshToken){
+            throw ApiError.unauthorizedError();
+        }
 
-        return token;
+        const userData = tokenService.validateRefreshToken(refreshToken);
+        const tokenFromDb = await tokenService.findToken(refreshToken);
+
+        if(!userData || typeof userData === 'string' || !tokenFromDb) {
+            throw ApiError.unauthorizedError();
+        }
+        
+        const user = await UserModel.findById(userData.id);
+        const userDto = new UserDto(user);
+        const tokens = tokenService.generateTokens({...userDto});
+        await tokenService.saveToken(userDto.id, tokens.refreshToken);
+
+        return {user: userDto, ...tokens};
     }
 }
 

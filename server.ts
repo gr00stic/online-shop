@@ -2,7 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import dbConnect from './config/dbConnect';
-import errorHandler from './middleware/errorHandler';
+import errorHandler from './middleware/error-middleware';
 import router from './routes';
 require('dotenv').config();
 
