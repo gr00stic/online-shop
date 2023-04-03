@@ -11,11 +11,11 @@ class ApiError extends Error {
     }
 
     static badRequest(message: string, errors = {}){
-        return new ApiError(400, message);
+        return new ApiError(400, message, errors);
     }
 
     static notFound(message: string, errors = {}){
-        return new ApiError(404, message);
+        return new ApiError(404, message, errors);
     }
 }
 

@@ -24,6 +24,12 @@ class TokenService{
 
         return token;
     }
+
+    async removeToken(refreshToken: string){
+        const token = await tokenModel.findOneAndDelete({refreshToken});
+
+        return token;
+    }
 }
 
 export default new TokenService();

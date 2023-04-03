@@ -6,11 +6,14 @@ function errorHandler(err: ApiError, req: Request, res: Response, next: NextFunc
         return res
             .status(err.status)
             .json({
-                message: err.message
+                message: err.message,
+                errors: err.errors
             });
     }
     
-    return res.status(500).json({ message: 'Unknown error' });
+    console.log(err);
+    
+    return res.status(500).json({ message: 'Unexpected error' });
 }
 
 export default errorHandler;

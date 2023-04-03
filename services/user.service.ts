@@ -47,7 +47,6 @@ class UserService {
         const userDto = new UserDto(user);
         const tokens = tokenService.generateTokens({...userDto});
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
-        
 
         return {user: userDto, ...tokens};
     }
@@ -72,6 +71,36 @@ class UserService {
         const activatedUser = UserModel.findByIdAndUpdate(user._id, {isActivated: true}, {new: true});
 
         return activatedUser;
+    }
+
+    async login(email: string, password: string){
+        const user = await UserModel.findOne({email});
+
+        if(!user){
+            throw ApiError.badRequest('User with this email not found');
+        }
+        
+        if(!await bcrypt.compare(password, user.password)){
+            throw ApiError.badRequest('Invalid password');
+        }
+
+        const userDto = new UserDto(user);
+        const tokens = tokenService.generateTokens({...userDto});
+        await tokenService.saveToken(userDto.id, tokens.refreshToken);
+
+        return {user: userDto, ...tokens};
+    }
+
+    async logout(refreshToken: string){
+        const token = await tokenService.removeToken(refreshToken);
+
+        return token;
+    }
+
+    async refresh(refreshToken: string){
+        const token = await tokenService.refreshToken(refreshToken);
+
+        return token;
     }
 }
 
