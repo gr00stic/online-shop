@@ -12,6 +12,6 @@ orderRouter.get('/get-user-orders', authMiddleware, orderController.getUserOrder
 
 orderRouter.post('/save-order', authMiddleware, orderController.saveOrder);
 
-orderRouter.put('/cancel-order/:orderId', authMiddleware,  )
+orderRouter.put('/cancel-order/:orderId', authMiddleware, orderController.cancelOrder);
 
 export default orderRouter;

@@ -40,6 +40,12 @@ class OrderService {
         
         return order;
     }
+
+    async cancelOrder(userId: string, userRole: string, orderId: string){
+        const order = await orderModel.findOneAndUpdate({ user: userRole === 'ADMIN' ? undefined : userId, _id: orderId }, {status: 'Cancelled'});
+
+        return order;
+    }
 }
 
 export default new OrderService();

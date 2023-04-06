@@ -28,7 +28,6 @@ class OrderController {
         try {
             const orderId = req.params.orderId;
             const { id, role }: { id: string, role: string } = req.user;
-            console.log(role);
 
             const order = await orderService.getOneOrder(id, role, orderId);
 
@@ -52,7 +51,12 @@ class OrderController {
 
     async cancelOrder(req: Request, res: Response, next: NextFunction) {
         try {
+            const orderId = req.params.orderId;
+            const { id, role }: { id: string, role: string } = req.user;
 
+            const order = await orderService.cancelOrder(id, role, orderId);
+
+            res.json(order);
         } catch (e) {
             next(e);
         }
