@@ -7,7 +7,7 @@ const UserSchema = new Schema({
     isActivated: { type: Boolean, default: false },
     activationLink: { type: String },
     lang: { type: String },
-    role: { type: String }
+    role: { type: String, default: 'USER' },
 });
 
 export default model("User", UserSchema);
