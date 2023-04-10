@@ -1,9 +1,10 @@
 import { Schema, model } from 'mongoose';
 
 const OrderSchema = new Schema({
-    user: {type: Schema.Types.ObjectId, ref: 'User'},
+    user: {type: Object, ref: 'User'},
     status: {type: String, default: 'Registered'},
-    items: [{type: Object}]
+    items: [{type: Object}],
+    total: {type: Number}
 },
 {
     timestamps: true
