@@ -1,14 +1,50 @@
 import { Request, Response, NextFunction } from "express";
 import ApiError from "../models/error.model";
 import Product from "../models/product.model";
+import Category from "../models/category.model";
+import Brand from "../models/brand.model";
 import ProductService from "../services/product.service";
 
 class ProductController {
 
     async getProducts(req: Request, res: Response, next: NextFunction) {
         try {
-            const products = await Product.find();
-            res.json({ "msg": "All products found: ", products });
+            const page = parseInt(req.query.page as string) -1 || 0;
+            const limit = parseInt(req.query.limit as string) || 100;
+            const search = req.query.search || "";
+            let sort = req.query.sort || "rating";
+            let categories = req.query.categories || "All";
+            let brands = req.query.brands || "All"; 
+
+            const categoriesFromDb = (await Category.aggregate([{$project: {_id: 1}}])).map(category => category = category._id);
+            const brandsFromDb = (await Brand.aggregate([{$project: {_id: 1}}])).map(brand => brand = brand._id);
+            
+            categories === "All" ? (categories = [...categoriesFromDb]) : (categories = (req.query.categories as string).split(","))
+            brands === "All" ? (brands = [...brandsFromDb]) : (brands = (req.query.brands as string).split(","))
+            
+            req.query.sort ? (sort = (req.query.sort as string).split(",")) : (sort = [sort as string]);
+            const sortBy: any = {};
+            sort[1] ? sortBy[sort[0]] = sort[1] : sortBy[sort[0]] = "desc";
+
+            let products = await Product.find({ name: {$regex: search, $options: "i"}})
+            .populate([
+                {path: 'category', select: 'name', model: Category},
+                {path: 'brand', select: 'name', model: Brand}])
+            .where('category').in([...categories])
+            .where('brand').in([...brands])
+            .sort(sortBy)
+            .limit(limit)
+            .skip(page * limit)
+ 
+            
+            res.json({
+                page,
+                limit,
+                categories,
+                search,
+                sort,
+                products
+            });
         } catch (e) {
             next(e);
         }
