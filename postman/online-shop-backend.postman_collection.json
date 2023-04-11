@@ -43,6 +43,48 @@
 								"api",
 								"product",
 								"products"
+							],
+							"query": [
+								{
+									"key": "categories",
+									"value": "6432d995fd4161466b6100c0",
+									"disabled": true
+								},
+								{
+									"key": "brands",
+									"value": "6432d995fd4161466b6100b9",
+									"disabled": true
+								},
+								{
+									"key": "minprice",
+									"value": "1000",
+									"disabled": true
+								},
+								{
+									"key": "maxprice",
+									"value": "2000",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "price,asc",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "chugun",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								}
 							]
 						}
 					},
