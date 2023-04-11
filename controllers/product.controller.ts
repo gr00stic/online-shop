@@ -9,40 +9,42 @@ class ProductController {
 
     async getProducts(req: Request, res: Response, next: NextFunction) {
         try {
-            const page = parseInt(req.query.page as string) -1 || 0;
+            const page = parseInt(req.query.page as string) - 1 || 0;
             const limit = parseInt(req.query.limit as string) || 100;
             const search = req.query.search || "";
             let sort = req.query.sort || "rating";
             let categories = req.query.categories || "All";
-            let brands = req.query.brands || "All"; 
+            let brands = req.query.brands || "All";
+            const maxPrice = parseInt(req.query.maxprice as string) || 100000;
+            const minPrice = parseInt(req.query.minprice as string) || 0;
 
-            const categoriesFromDb = (await Category.aggregate([{$project: {_id: 1}}])).map(category => category = category._id);
-            const brandsFromDb = (await Brand.aggregate([{$project: {_id: 1}}])).map(brand => brand = brand._id);
-            
+            const categoriesFromDb = (await Category.aggregate([{ $project: { _id: 1 } }])).map(category => category = category._id);
+            const brandsFromDb = (await Brand.aggregate([{ $project: { _id: 1 } }])).map(brand => brand = brand._id);
+
             categories === "All" ? (categories = [...categoriesFromDb]) : (categories = (req.query.categories as string).split(","))
             brands === "All" ? (brands = [...brandsFromDb]) : (brands = (req.query.brands as string).split(","))
-            
+
             req.query.sort ? (sort = (req.query.sort as string).split(",")) : (sort = [sort as string]);
             const sortBy: any = {};
             sort[1] ? sortBy[sort[0]] = sort[1] : sortBy[sort[0]] = "desc";
 
-            let products = await Product.find({ name: {$regex: search, $options: "i"}})
-            .populate([
-                {path: 'category', select: 'name', model: Category},
-                {path: 'brand', select: 'name', model: Brand}])
-            .where('category').in([...categories])
-            .where('brand').in([...brands])
-            .sort(sortBy)
-            .limit(limit)
-            .skip(page * limit)
- 
-            
+            let products = await Product.find({
+                name: { $regex: search, $options: "i" },
+                brand: { $in: brands },
+                category: { $in: categories },
+                price: { $gte: minPrice, $lte: maxPrice }
+            })
+                .sort(sortBy)
+                .limit(limit)
+                .skip(page * limit);
+
             res.json({
                 page,
                 limit,
                 categories,
                 search,
                 sort,
+                maxPrice, minPrice,
                 products
             });
         } catch (e) {
@@ -62,7 +64,7 @@ class ProductController {
 
     async createProduct(req: Request, res: Response, next: NextFunction) {
         try {
-            const { name, price }:{name: string, price: number} = req.body;
+            const { name, price }: { name: string, price: number } = req.body;
 
             if (!name || !price) {
                 res.status(400);
@@ -70,7 +72,7 @@ class ProductController {
             }
 
             const product = await Product.create({ name: name, price: Number(price) });
-            
+
             res.status(200).json({ "msg": "New product was created", product });
         } catch (e) {
             next(e);
