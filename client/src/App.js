@@ -1,6 +1,34 @@
 // import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import Card from './components/Card';
+import Header from './components/Header';
+
+let arr = [
+  { title: 'chel phone', price: 500, imageUrl: 'img/chel.jpg' },
+  { title: 'cell phone', price: 1500, imageUrl: 'img/logo.png' },
+  { title: 'chugunnaya vanna', price: 50000, imageUrl: 'img/chugun.jpg' },
+  { title: 'gazoviy televizor', price: 25000, imageUrl: 'img/gaz.jpg' },
+]
+
+
 
 const App = () => {
+
+  const [items, setItems] = useState([]);
+
+// Примечание: пустой массив зависимостей [] означает, что
+// этот useEffect будет запущен один раз
+// аналогично componentDidMount()
+useEffect(() => {
+  fetch("http://localhost:5000/api/product/products")
+    .then(res => res.json())
+    .then(
+      (result) => {
+        setItems(result.products);
+      }
+    )
+}, [])
+console.log(items);
   return (
     // <BrowserRouter>
     // <Routes>
@@ -8,82 +36,71 @@ const App = () => {
     //   </Route>
 
     // </Routes>
-    // </BrowserRouter>
+    // </BrowserRouter> 
     <div className='wrapper clear'>
-      <header className='d-flex justify-between align-center p-40'>
-        <div className='d-flex align-center'>
-          <img width={100} height={100} src='img/logo.png' />
-          <div>
-            <h3 className='text-uppercase'>Sho p</h3>
-            <p>Vintage electronics</p>
-          </div>
-        </div>
-        <ul className='d-flex'>
-          <li className='mr-15'>
-            <img width={18} height={18} src='img/cart.svg' />
-            <span>500$</span>
-          </li>
-          <li>
-            <img width={18} height={18} src='img/user.svg' />
-          </li>
-        </ul>
-      </header>
-      <div className='content p-40'>
-        <h1 className='mb-40'>Products</h1>
-        <div className='d-flex'>
-          <div className='card'>
-            <img width={133} height={112} src='img/gaz.jpg' />
-            <p>Gazoviy televizor</p>
-            <div className='d-flex justify-between align-center'>
-              <div className='d-flex flex-column'>
-                <span>Price</span>
-                <b>100$</b>
+      <div style={{ display: 'none' }} className="cartShadow">
+        <div className="cart">
+          <h2 className="mb-30">Cart</h2>
+
+          <div className="items">
+            <div className="cartItem d-flex align-center mb-10">
+              <img className="mr-20" width={70} height={70} src="img/chugun.jpg" alt="item" />
+              <div className="mr-20">
+                <p className="mb-5">Chugunnaya vanna</p>
+                <b>1000$</b>
               </div>
-              <button className='button'>
-                <img width={11} height={11} src='img/plus.svg' alt='Plus' />
-              </button>
+              <img className="cartItemRemove" src="img/btn-remove.svg" alt="remove" />
+            </div>
+
+            <div className="cartItem d-flex align-center mb-10">
+              <img className="mr-20" width={70} height={70} src="img/chugun.jpg" alt="item" />
+              <div className="mr-20">
+                <p className="mb-5">Chugunnaya vanna</p>
+                <b>1000$</b>
+              </div>
+              <img className="cartItemRemove" src="img/btn-remove.svg" alt="remove" />
             </div>
           </div>
-          <div className='card'>
-          <img width={133} height={112} src='img/gaz.jpg'/>
-          <p>Gazoviy televizor</p>
-          <div className='d-flex justify-between align-center'>
-            <div className='d-flex flex-column'>
-              <span>Price</span>
-              <b>100$</b>
-            </div>
-            <button className='button'>
-              <img width={11} height={11} src='img/plus.svg' alt='Plus'/>
-            </button>
+          <ul>
+            <li>
+              <span></span>
+              <div></div>
+              <b></b>
+            </li>
+            <li>
+              <span></span>
+              <div></div>
+              <b></b>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <Header />
+
+      <div className='content p-40'>
+        <div className="d-flex align-center mb-40 justify-between">
+          <h1>Products</h1>
+          <div className="search-block d-flex">
+            <img src="img/search.svg" alt="Search" />
+            <input placeholder="Search" />
           </div>
         </div>
-        <div className='card'>
-          <img width={133} height={112} src='img/chugun.jpg'/>
-          <p>Chugunnaya vanna</p>
-          <div className='d-flex justify-between align-center'>
-            <div className='d-flex flex-column'>
-              <span>Price</span>
-              <b>1000$</b>
-            </div>
-            <button className='button'>
-              <img width={11} height={11} src='img/plus.svg' alt='Plus'/>
-            </button>
-          </div>
-        </div>
-        <div className='card'>
-          <img width={133} height={112} src='img/chugun.jpg'/>
-          <p>Chugunnaya vanna</p>
-          <div className='d-flex justify-between align-center'>
-            <div className='d-flex flex-column'>
-              <span>Price</span>
-              <b>1000$</b>
-            </div>
-            <button className='button'>
-              <img width={11} height={11} src='img/plus.svg' alt='Plus'/>
-            </button>
-          </div>
-        </div>
-        
+        <div className='d-flex flex-wrap'>
+          {/* <Card
+            title="Gazoviyo televizor"
+            price={1200}
+            imageUrl="img/chugun.jpg"
+          /> */}
+          {
+            items.map((item) => (
+              <Card
+                title={item.name}
+                price={item.price}
+                imageUrl='img/logo.png'
+              />
+            ))
+          }
         </div>
       </div>
     </div>
