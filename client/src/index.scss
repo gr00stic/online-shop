@@ -43,7 +43,7 @@ header {
 }
 
 .cartShadow {
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   width: 100%;
@@ -81,10 +81,11 @@ header {
   }
 
   .cartItemRemove {
+    margin-left: auto;
+    margin-right: 10px;
     opacity: 0.5;
     cursor: pointer;
     transition: opacity 0.2s ease-in-out;
-    padding-left: 60px;
 
     &:hover {
       opacity: 1;

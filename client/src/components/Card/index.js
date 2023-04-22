@@ -1,25 +1,34 @@
+import { useState } from 'react';
 import styles from './Card.module.scss'
 
-function Card(props) {
-    const onClickAdd = () => {
-        alert(props.title);
+function Card({title, imageUrl, favorite, price, onPlus}) {
+    const [isAdded, setIsAdded] = useState(false);
+    const [isFavorite, setIsFavorite] = useState(false);
+
+    const handleClickFavorite = () => {
+        setIsFavorite(!isFavorite);
     }
+
+    const handleCLickPlus = () => {
+        onPlus({title, imageUrl, price});
+        setIsAdded(!isAdded);
+    }
+
+    // console.log(isAdded);
 
     return (
         <div className={styles.card}>
-            <div className={styles.favorite}>
-                <img width={11} height={11} src="img/heart.svg" alt="likeOff" />
+            <div>
+                <img className={styles.favorite} onClick={handleClickFavorite} src={isFavorite ? 'img/like-on.svg' : 'img/like-off.svg'} alt="likeOff" />
             </div>
-            <img width={133} height={112} src={props.imageUrl} />
-            <p>{props.title}</p>
+            <img width={133} height={112} src={imageUrl} />
+            <p>{title}</p>
             <div className='d-flex justify-between align-center'>
                 <div className='d-flex flex-column'>
                     <span>Price</span>
-                    <b>{props.price} $</b>
+                    <b>{price} $</b>
                 </div>
-                <button className='button' onClick={onClickAdd}>
-                    <img width={11} height={11} src='img/plus.svg' alt='Plus' />
-                </button>
+                <img className={styles.plus} onClick={handleCLickPlus} src={isAdded ? 'img/btn-checked.svg' : 'img/btn-unchecked.svg'} alt='Plus' />
             </div>
         </div>
     );
