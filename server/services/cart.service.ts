@@ -11,11 +11,12 @@ class CartService {
 
         const items: Array<any> = [];
 
-        if (!cart) return { msg: "Cart is empty" };
+        if (!cart) return [];
 
         for (const item of cart.items) {
             const isItemExists = await productService.isProductExists(String(item));
-            if (isItemExists) items.push(new ProductDto(isItemExists));
+            if (isItemExists) items.push(isItemExists);
+            // items.push(new ProductDto(isItemExists));
         }
 
         return items;
