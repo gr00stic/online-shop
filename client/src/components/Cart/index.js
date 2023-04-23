@@ -11,12 +11,12 @@ function Cart({ onClose, onRemove, items = [] }) {
                     {
                         items.map((item) => (
                             <div key={item.key} className="cartItem d-flex align-center mb-10">
-                                <img className="mr-20" width={70} height={70} src={item.imageUrl} alt="item" />
+                                <img className="mr-20" width={70} height={70} src='img/logo.png' alt="item" />
                                 <div className="mr-20">
-                                    <p className="mb-5">{item.title}</p>
+                                    <p className="mb-5">{item.name}</p>
                                     <b>{item.price}$</b>
                                 </div>
-                                <img onClick={ () => onRemove(item.title)} className="cartItemRemove" src="img/btn-remove.svg" alt="remove" />
+                                <img onClick={ () => onRemove(item)} className="cartItemRemove" src="img/btn-remove.svg" alt="remove" />
                             </div>
                         ))
                     }

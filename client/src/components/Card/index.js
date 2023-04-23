@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './Card.module.scss'
 
-function Card({title, imageUrl, favorite, price, onPlus}) {
+function Card({name, imageUrl, favorite, price, onPlus, _id}) {
     const [isAdded, setIsAdded] = useState(false);
     const [isFavorite, setIsFavorite] = useState(false);
 
@@ -10,7 +10,7 @@ function Card({title, imageUrl, favorite, price, onPlus}) {
     }
 
     const handleCLickPlus = () => {
-        onPlus({title, imageUrl, price});
+        onPlus({name, imageUrl, price, _id});
         setIsAdded(!isAdded);
     }
 
@@ -22,7 +22,7 @@ function Card({title, imageUrl, favorite, price, onPlus}) {
                 <img className={styles.favorite} onClick={handleClickFavorite} src={isFavorite ? 'img/like-on.svg' : 'img/like-off.svg'} alt="likeOff" />
             </div>
             <img width={133} height={112} src={imageUrl} />
-            <p>{title}</p>
+            <p>{name}</p>
             <div className='d-flex justify-between align-center'>
                 <div className='d-flex flex-column'>
                     <span>Price</span>
