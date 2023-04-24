@@ -9,6 +9,10 @@ body {
   font-family: 'Inter', system-ui;
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -43,6 +47,7 @@ header {
 }
 
 .cartShadow {
+  overflow: hidden;
   position: fixed;
   left: 0;
   top: 0;
@@ -54,6 +59,7 @@ header {
 
 .cart {
   position: absolute;
+  overflow-y: scroll;
   width: 420px;
   height: 100%;
   right: 0;

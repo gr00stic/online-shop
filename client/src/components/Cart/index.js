@@ -1,4 +1,12 @@
+import { Button } from '@mui/material'
+import { Link } from 'react-router-dom';
+import $api from '../../http';
+
 function Cart({ onClose, onRemove, items = [] }) {
+
+    const addToCart = async () => {
+        $api.post('/order/save-order', {items}).then(res => console.log(res.data));
+    }
     return (
         <div className="cartShadow">
             <div className="cart">
@@ -16,11 +24,16 @@ function Cart({ onClose, onRemove, items = [] }) {
                                     <p className="mb-5">{item.name}</p>
                                     <b>{item.price}$</b>
                                 </div>
-                                <img onClick={ () => onRemove(item)} className="cartItemRemove" src="img/btn-remove.svg" alt="remove" />
+                                <img onClick={() => onRemove(item)} className="cartItemRemove" src="img/btn-remove.svg" alt="remove" />
                             </div>
                         ))
                     }
                 </div>
+                <Link to={'/'}>
+                    <Button onClick={() => addToCart()} variant="contained" color="success">
+                        Order
+                    </Button>
+                </Link>
             </div>
         </div>
     );
