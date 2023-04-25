@@ -7,6 +7,7 @@ import { Route, RouterProvider, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Favorites from './pages/Favorites';
 import Profile from './pages/Profile';
+import $api from './http/index';
 
 const App = () => {
   const [userData, setUserData] = useState();
@@ -32,6 +33,12 @@ const App = () => {
     axios.put(`http://localhost:5000/api/cart/remove-item/${item._id}`, {}, config)
   }
 
+  const onCartClear = async () => {
+    const res = await $api.delete('/cart/clear-cart');
+    setCartItems([]);
+    console.log(res.data);
+  }
+
 
   useEffect(() => {
     axios.get("http://localhost:5000/api/product/products").then(res => setItems(res.data.products))
@@ -42,7 +49,7 @@ const App = () => {
   return (
     <div className='wrapper clear'>
 
-      {isCartOpened ? <Cart items={cartItems} onRemove={(item) => onCartRemove(item)} onClose={() => setIsCartOpened(false)} /> : null}
+      {isCartOpened ? <Cart items={cartItems} onClear={() => onCartClear()} onRemove={(item) => onCartRemove(item)} onClose={() => setIsCartOpened(false)} /> : null}
       <Header onClickCart={() => setIsCartOpened(true)} />
       <Routes>
         <Route path='/' element={<Home searchValue={searchValue} setSearchValue={setSearchValue} items={items} onAddToCart={onAddToCart} />} />

@@ -2,11 +2,13 @@ import { Button } from '@mui/material'
 import { Link } from 'react-router-dom';
 import $api from '../../http';
 
-function Cart({ onClose, onRemove, items = [] }) {
+function Cart({ onClose, onRemove, onClear, items = [] }) {
 
     const addToCart = async () => {
-        $api.post('/order/save-order', {items}).then(res => console.log(res.data));
+        const res = await $api.post('/order/save-order', { items });
+        console.log(res.data);
     }
+
     return (
         <div className="cartShadow">
             <div className="cart">
@@ -32,6 +34,9 @@ function Cart({ onClose, onRemove, items = [] }) {
                 <Link to={'/'}>
                     <Button onClick={() => addToCart()} variant="contained" color="success">
                         Order
+                    </Button>
+                    <Button onClick={() => onClear()} className='ml-20' variant="outlined">
+                        Clear cart
                     </Button>
                 </Link>
             </div>
